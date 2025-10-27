@@ -37,8 +37,8 @@ st.markdown(
 # --------------------------
 # Cabeçalho
 # --------------------------
-st.title("📄 Gerador de Laudo Técnico")
-st.markdown("Preencha o formulário e exporte o laudo em Word (.docx) com o modelo padrão da empresa.")
+st.title("📄 Laudo de descaracterização - HNK")
+st.markdown("Insira os dados solicitados para gerar o laudo:")
 
 # --------------------------
 # Caminho do modelo interno
@@ -155,3 +155,4 @@ if st.button("🚀 Gerar Laudo"):
                 file_name=nome_docx,
                 on_click=limpar_campos  # Limpa o formulário após o download
             )
+
