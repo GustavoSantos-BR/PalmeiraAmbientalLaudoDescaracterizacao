@@ -39,16 +39,31 @@ if not os.path.exists(modelo_path):
     st.stop()
 
 # --------------------------
-# Função de limpeza
+# Inicialização de estados
+# --------------------------
+if "limpar_page" not in st.session_state:
+    st.session_state["limpar_page"] = False
+
+# --------------------------
+# Função de limpeza completa
 # --------------------------
 def limpar_campos():
-    for key in [
-        "data", "nf", "produto", "quantidade_pack", "unidade_pack",
-        "transportadora", "observacoes"
-    ]:
-        if key in st.session_state:
-            del st.session_state[key]
-    st.success("🧹 Campos do formulário limpos.")
+    st.session_state["data"] = datetime.today()
+    st.session_state["nf"] = ""
+    st.session_state["produto"] = "904961 - CERV HEINEKEN 0,0% 0,350LTSLEEKDES12UNPB"
+    st.session_state["quantidade_pack"] = 0
+    st.session_state["unidade_pack"] = 0
+    st.session_state["transportadora"] = ""
+    st.session_state["observacoes"] = ""
+    # Flag para recarregar a página e limpar file_uploaders
+    st.session_state["limpar_page"] = True
+
+# --------------------------
+# Verifica se precisa recarregar
+# --------------------------
+if st.session_state["limpar_page"]:
+    st.session_state["limpar_page"] = False
+    st.experimental_rerun()
 
 # --------------------------
 # Formulário
@@ -135,7 +150,7 @@ if st.button("🚀 Gerar Laudo"):
             )
 
 # --------------------------
-# Botão manual de limpeza
+# Botão de limpeza manual
 # --------------------------
 st.markdown("---")
-st.button("🧹 Limpar Campos do Formulário", on_click=limpar_campos)
+st.button("🧹 Limpar Todos os Campos", on_click=limpar_campos)
