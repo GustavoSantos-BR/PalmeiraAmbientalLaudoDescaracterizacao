@@ -38,7 +38,7 @@ st.markdown(
 # Cabeçalho
 # --------------------------
 st.title("📄 Laudo de descaracterização - HNK")
-st.markdown("Insira os dados solicitados para gerar o laudo:")
+st.markdown("Insira os dados solicitados para gerar o laudo.")
 
 # --------------------------
 # Caminho do modelo interno
@@ -51,24 +51,21 @@ if not os.path.exists(modelo_path):
 # --------------------------
 # Inicialização dos estados
 # --------------------------
-if "reset_form" not in st.session_state:
-    st.session_state.reset_form = False
+if "limpar" not in st.session_state:
+    st.session_state.limpar = False
 
 # --------------------------
-# Função de limpeza
+# Função de limpeza (sem alterar file_uploaders diretamente)
 # --------------------------
 def limpar_campos():
-    st.session_state.data = datetime.today()
-    st.session_state.nf = ""
-    st.session_state.produto = "904961 - CERV HEINEKEN 0,0% 0,350LTSLEEKDES12UNPB"
-    st.session_state.quantidade_pack = 0
-    st.session_state.unidade_pack = 0
-    st.session_state.transportadora = ""
-    st.session_state.observacoes = ""
-    st.session_state.foto_etiqueta = None
-    st.session_state.foto_produto = None
-    st.session_state.foto_embalagem = None
-    st.session_state.foto_descaracterizado = None
+    for key in [
+        "data", "nf", "produto", "quantidade_pack", "unidade_pack",
+        "transportadora", "observacoes"
+    ]:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.session_state.limpar = True
+    st.rerun()
 
 # --------------------------
 # Formulário (1 coluna)
@@ -99,10 +96,10 @@ transportadora = st.text_input("Transportadora", key="transportadora")
 observacoes = st.text_area("Observações", height=120, key="observacoes")
 
 st.markdown("### 📸 Envie as imagens")
-foto_etiqueta = st.file_uploader("Foto | Etiqueta", type=["jpg", "jpeg", "png"], key="foto_etiqueta")
-foto_produto = st.file_uploader("Foto | Produto Recebido", type=["jpg", "jpeg", "png"], key="foto_produto")
-foto_embalagem = st.file_uploader("Foto | Embalagem", type=["jpg", "jpeg", "png"], key="foto_embalagem")
-foto_descaracterizado = st.file_uploader("Foto | Produto Descaracterizado", type=["jpg", "jpeg", "png"], key="foto_descaracterizado")
+foto_etiqueta = st.file_uploader("Foto | Etiqueta", type=["jpg", "jpeg", "png"])
+foto_produto = st.file_uploader("Foto | Produto Recebido", type=["jpg", "jpeg", "png"])
+foto_embalagem = st.file_uploader("Foto | Embalagem", type=["jpg", "jpeg", "png"])
+foto_descaracterizado = st.file_uploader("Foto | Produto Descaracterizado", type=["jpg", "jpeg", "png"])
 
 # --------------------------
 # Função auxiliar para imagens
@@ -153,6 +150,5 @@ if st.button("🚀 Gerar Laudo"):
                 "📘 Baixar Laudo em Word (.docx)",
                 fdocx,
                 file_name=nome_docx,
-                on_click=limpar_campos  # Limpa o formulário após o download
+                on_click=limpar_campos  # chama a limpeza segura
             )
-
