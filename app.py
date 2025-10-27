@@ -11,28 +11,18 @@ import os
 st.set_page_config(
     page_title="Gerador de Laudos Técnicos",
     page_icon="📄",
-    layout="wide",  # modo WIDE
+    layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# Forçar tema claro e tons de verde
-st.markdown(
-    """
-    <style>
-    :root {
-        color-scheme: light !important;
-    }
-    .stApp {
-        background-color: #ffffff;
-        color: #1a1a1a;
-    }
-    h1, h2, h3, h4, h5 {
-        color: #016241;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Tema claro com tons de verde
+st.markdown("""
+<style>
+:root { color-scheme: light !important; }
+.stApp { background-color: #ffffff; color: #1a1a1a; }
+h1,h2,h3,h4,h5 { color: #016241; }
+</style>
+""", unsafe_allow_html=True)
 
 # --------------------------
 # Cabeçalho
@@ -41,15 +31,15 @@ st.title("📄 Laudo de descaracterização - HNK")
 st.markdown("Insira os dados solicitados para gerar o laudo.")
 
 # --------------------------
-# Caminho do modelo interno
+# Modelo Word
 # --------------------------
 modelo_path = os.path.join("modelos", "modelo_laudo.docx")
 if not os.path.exists(modelo_path):
-    st.error("❌ O modelo Word não foi encontrado. Verifique se o arquivo 'modelo_laudo.docx' está na pasta 'modelos'.")
+    st.error("❌ Modelo Word não encontrado em 'modelos/modelo_laudo.docx'.")
     st.stop()
 
 # --------------------------
-# Função de limpeza (manual)
+# Função de limpeza
 # --------------------------
 def limpar_campos():
     for key in [
@@ -58,10 +48,10 @@ def limpar_campos():
     ]:
         if key in st.session_state:
             del st.session_state[key]
-    st.experimental_rerun()
+    st.success("🧹 Campos do formulário limpos.")
 
 # --------------------------
-# Formulário (1 coluna)
+# Formulário
 # --------------------------
 st.markdown("### 🧾 Informações do Laudo")
 
@@ -80,7 +70,7 @@ produto = st.selectbox(
         "903996 - HEINEKEN 0,0% LN 330ML 4X6 - K2",
         "904932 - CERV HEINEKEN PIL 0,350LT SLEEKDES12UNPB",
     ],
-    key="produto",
+    key="produto"
 )
 
 quantidade_pack = st.number_input("Quantidade Pack", min_value=0, step=1, key="quantidade_pack")
@@ -114,7 +104,6 @@ if st.button("🚀 Gerar Laudo"):
     else:
         doc = DocxTemplate(modelo_path)
 
-        # Dicionário de dados (placeholders)
         dados = {
             "data": data.strftime("%d/%m/%Y"),
             "nota_fiscal": nf,
@@ -146,7 +135,7 @@ if st.button("🚀 Gerar Laudo"):
             )
 
 # --------------------------
-# Botão de limpeza manual
+# Botão manual de limpeza
 # --------------------------
 st.markdown("---")
 st.button("🧹 Limpar Campos do Formulário", on_click=limpar_campos)
