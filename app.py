@@ -49,12 +49,34 @@ if not os.path.exists(modelo_path):
     st.stop()
 
 # --------------------------
+# Inicialização dos estados
+# --------------------------
+if "reset_form" not in st.session_state:
+    st.session_state.reset_form = False
+
+# --------------------------
+# Função de limpeza
+# --------------------------
+def limpar_campos():
+    st.session_state.data = datetime.today()
+    st.session_state.nf = ""
+    st.session_state.produto = "904961 - CERV HEINEKEN 0,0% 0,350LTSLEEKDES12UNPB"
+    st.session_state.quantidade_pack = 0
+    st.session_state.unidade_pack = 0
+    st.session_state.transportadora = ""
+    st.session_state.observacoes = ""
+    st.session_state.foto_etiqueta = None
+    st.session_state.foto_produto = None
+    st.session_state.foto_embalagem = None
+    st.session_state.foto_descaracterizado = None
+
+# --------------------------
 # Formulário (1 coluna)
 # --------------------------
 st.markdown("### 🧾 Informações do Laudo")
 
-data = st.date_input("Data", datetime.today())
-nf = st.text_input("Nº Nota Fiscal")
+data = st.date_input("Data", datetime.today(), key="data")
+nf = st.text_input("Nº Nota Fiscal", key="nf")
 
 produto = st.selectbox(
     "Produto",
@@ -68,18 +90,19 @@ produto = st.selectbox(
         "903996 - HEINEKEN 0,0% LN 330ML 4X6 - K2",
         "904932 - CERV HEINEKEN PIL 0,350LT SLEEKDES12UNPB",
     ],
+    key="produto",
 )
 
-quantidade_pack = st.number_input("Quantidade Pack", min_value=0, step=1)
-unidade_pack = st.number_input("Unidade Pack", min_value=0, step=1)
-transportadora = st.text_input("Transportadora")
-observacoes = st.text_area("Observações", height=120)
+quantidade_pack = st.number_input("Quantidade Pack", min_value=0, step=1, key="quantidade_pack")
+unidade_pack = st.number_input("Unidade Pack", min_value=0, step=1, key="unidade_pack")
+transportadora = st.text_input("Transportadora", key="transportadora")
+observacoes = st.text_area("Observações", height=120, key="observacoes")
 
 st.markdown("### 📸 Envie as imagens")
-foto_etiqueta = st.file_uploader("Foto | Etiqueta", type=["jpg", "jpeg", "png"])
-foto_produto = st.file_uploader("Foto | Produto Recebido", type=["jpg", "jpeg", "png"])
-foto_embalagem = st.file_uploader("Foto | Embalagem", type=["jpg", "jpeg", "png"])
-foto_descaracterizado = st.file_uploader("Foto | Produto Descaracterizado", type=["jpg", "jpeg", "png"])
+foto_etiqueta = st.file_uploader("Foto | Etiqueta", type=["jpg", "jpeg", "png"], key="foto_etiqueta")
+foto_produto = st.file_uploader("Foto | Produto Recebido", type=["jpg", "jpeg", "png"], key="foto_produto")
+foto_embalagem = st.file_uploader("Foto | Embalagem", type=["jpg", "jpeg", "png"], key="foto_embalagem")
+foto_descaracterizado = st.file_uploader("Foto | Produto Descaracterizado", type=["jpg", "jpeg", "png"], key="foto_descaracterizado")
 
 # --------------------------
 # Função auxiliar para imagens
@@ -114,17 +137,21 @@ if st.button("🚀 Gerar Laudo"):
             "foto_produto": criar_inline_image(doc, foto_produto.read() if foto_produto else None),
             "foto_embalagem": criar_inline_image(doc, foto_embalagem.read() if foto_embalagem else None),
             "foto_descaracterizado": criar_inline_image(doc, foto_descaracterizado.read() if foto_descaracterizado else None),
-            "assinatura": f"Ponta Grossa, {data.strftime('%d/%m/%Y')}\nPreenchido por:\n______________________________\nHemellin Nathali Mendes\nAnalista de Meio Ambiente",
+            "assinatura": f"Ponta Grossa, {data.strftime('%d/%m/%Y')}\n\nPreenchido por:\n\n______________________________\nHemellin Nathali Mendes\nAnalista de Meio Ambiente",
             "responsavel_geracao": "Sistema de Laudos - Beleza S/A",
             "data_geracao": datetime.now().strftime("%d/%m/%Y %H:%M"),
         }
 
         doc.render(dados)
 
-        # Nome automático
         nome_docx = f"Laudo_{nf}_{data.strftime('%Y-%m-%d')}.docx"
         doc.save(nome_docx)
         st.success(f"✅ Laudo gerado com sucesso: {nome_docx}")
 
         with open(nome_docx, "rb") as fdocx:
-            st.download_button("📘 Baixar Laudo em Word (.docx)", fdocx, file_name=nome_docx)
+            st.download_button(
+                "📘 Baixar Laudo em Word (.docx)",
+                fdocx,
+                file_name=nome_docx,
+                on_click=limpar_campos  # Limpa o formulário após o download
+            )
