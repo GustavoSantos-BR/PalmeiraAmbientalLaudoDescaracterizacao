@@ -49,13 +49,7 @@ if not os.path.exists(modelo_path):
     st.stop()
 
 # --------------------------
-# Inicialização dos estados
-# --------------------------
-if "limpar" not in st.session_state:
-    st.session_state.limpar = False
-
-# --------------------------
-# Função de limpeza (sem alterar file_uploaders diretamente)
+# Função de limpeza (manual)
 # --------------------------
 def limpar_campos():
     for key in [
@@ -64,8 +58,7 @@ def limpar_campos():
     ]:
         if key in st.session_state:
             del st.session_state[key]
-    st.session_state.limpar = True
-    st.rerun()
+    st.experimental_rerun()
 
 # --------------------------
 # Formulário (1 coluna)
@@ -149,6 +142,11 @@ if st.button("🚀 Gerar Laudo"):
             st.download_button(
                 "📘 Baixar Laudo em Word (.docx)",
                 fdocx,
-                file_name=nome_docx,
-                on_click=limpar_campos  # chama a limpeza segura
+                file_name=nome_docx
             )
+
+# --------------------------
+# Botão de limpeza manual
+# --------------------------
+st.markdown("---")
+st.button("🧹 Limpar Campos do Formulário", on_click=limpar_campos)
