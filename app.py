@@ -15,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Tema claro com tons de verde
+# Forçar tema claro com tons de verde
 st.markdown("""
 <style>
 :root { color-scheme: light !important; }
@@ -121,10 +121,3 @@ if st.button("🚀 Gerar Laudo"):
                 fdocx,
                 file_name=nome_docx
             )
-
-# --------------------------
-# Botão de atualizar página
-# --------------------------
-st.markdown("---")
-if st.button("🔄 Atualizar Página"):
-    st.experimental_rerun()
