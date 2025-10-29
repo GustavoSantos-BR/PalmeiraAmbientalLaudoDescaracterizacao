@@ -57,6 +57,16 @@ produto = st.selectbox(
         "904895 - CERV HEINEKEN 0,0% 0,269LT DESC 8UN PBR",
         "903996 - HEINEKEN 0,0% LN 330ML 4X6 - K2",
         "904932 - CERV HEINEKEN PIL 0,350LT SLEEKDES12UNPB",
+        "903482 - HEIN PIL 600 24",
+        "904952	- CERV AMSTEL LAGER 0,350LT SLEEK 12UN PBR",
+        "904113	- AMSTEL LATA 269ML 12 PACK PURO MALTE",
+        "905271	- CERV SOL PIL0,330GFA DESC ASTRO 4X6UNPBR",
+        "904701	- CERV SOL PIL0,330GFA DESC ASTRO 4X6UNPBR",
+        "903483	- DRAFT BEER HEINEKEN PIL 5L DESC 2UNPD",
+        "903480	- HEIN PIL NR 600 12",
+
+
+
     ],
     key="produto"
 )
@@ -121,3 +131,4 @@ if st.button("🚀 Gerar Laudo"):
                 fdocx,
                 file_name=nome_docx
             )
+
