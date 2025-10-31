@@ -1,5 +1,7 @@
 # 🌿 Sistema de Geração de Laudos – Palmeira Ambiental
 
+Link de Acesso: https://palmeira-ambiental--laudo-descaracterizacao-hnk.streamlit.app/
+
 Aplicação desenvolvida para automatizar a criação de **laudos técnicos ambientais**, gerando documentos em **Word (.docx)** a partir de dados preenchidos em formulário. Cada laudo segue o modelo institucional da **Palmeira Ambiental**, com identidade visual padronizada, assinatura da responsável técnica e formatação automática.
 
 ---
